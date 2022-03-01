@@ -1,0 +1,15 @@
+#!/bin/bash
+
+cd BuildFiles/Ninja-Build/
+ninja > /dev/null
+status=$?
+cd ../..
+
+if [ $status -eq 0 ]
+    then
+        ./BuildFiles/Ninja-Build/Tetris
+    else
+        cd BuildFiles/Ninja-Build/
+        ninja
+        cd ../..
+fi
