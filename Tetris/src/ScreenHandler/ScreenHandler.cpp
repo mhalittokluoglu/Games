@@ -349,6 +349,8 @@ void ScreenHandler::ClearFullRows()
                 wmove(m_GameWindow, i, j);
                 wattron(m_GameWindow, COLOR_PAIR(colorAbove));
                 wprintw(m_GameWindow, "%c", charAbove);
+                int16_t colorMapIndex = i  * m_WindowWidth + j;
+                m_ColorMap[colorMapIndex] = colorAbove;
                 wattroff(m_GameWindow, COLOR_PAIR(colorAbove));
             }
         }
