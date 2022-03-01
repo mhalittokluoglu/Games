@@ -53,6 +53,7 @@ void ScreenHandler::Start()
 
 void ScreenHandler::RunInputEvents()
 {
+    m.lock();
     keypad(m_GameWindow, true);
     while (true)
     {
@@ -75,6 +76,7 @@ void ScreenHandler::RunInputEvents()
         }
         wrefresh(m_GameWindow);
     }
+    m.unlock();
 }
 
 void ScreenHandler::TimeTick()
