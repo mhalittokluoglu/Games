@@ -4,8 +4,8 @@ project(Tetris)
 add_executable(${PROJECT_NAME} src/Main.cpp 
 src/ScreenHandler/ScreenHandler.hpp
 src/ScreenHandler/ScreenHandler.cpp
-src/ScreenHandler/InputHandler.hpp
-src/ScreenHandler/InputHandler.cpp
+src/ScreenHandler/Timer.hpp
+src/ScreenHandler/Timer.cpp
 src/Tetrominos/TetrominosGenerator.hpp
 src/Tetrominos/TetrominosGenerator.cpp
 src/Tetrominos/Tetrominos.hpp

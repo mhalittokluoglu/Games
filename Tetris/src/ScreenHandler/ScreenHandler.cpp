@@ -2,7 +2,9 @@
 #include <ncurses.h>
 #include <cstdlib>
 #include <cstring>
+#include <mutex>
 
+extern std::mutex m;
 
 ScreenHandler::ScreenHandler(uint16_t height, uint16_t width)
     : m_WindowHeight{height}, m_WindowWidth(width)
@@ -47,7 +49,10 @@ void ScreenHandler::Start()
     refresh();
     UpdateVirtualScreen();
     wrefresh(m_GameWindow);
+}
 
+void ScreenHandler::RunInputEvents()
+{
     keypad(m_GameWindow, true);
     while (true)
     {

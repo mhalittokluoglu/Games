@@ -1,11 +1,11 @@
 #include "ScreenHandler/ScreenHandler.hpp"
-#include "ScreenHandler/InputHandler.hpp"
+#include "ScreenHandler/Timer.hpp"
 int main()
 {
     ScreenHandler handler;
     handler.Start();
-    // InputHandler::InitiateInputHandler(handler);
-
+    Timer::InitiateTimer(&handler);
+    handler.RunInputEvents();
     getch();
     // while(true);
 }

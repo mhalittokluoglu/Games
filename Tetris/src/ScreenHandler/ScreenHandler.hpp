@@ -14,6 +14,7 @@ public:
     void LeftKeyPressed();
     void RightKeyPressed();
     void Start();
+    void RunInputEvents();
 
     friend class InputHandler;
 
