@@ -7,7 +7,7 @@
 extern std::mutex m;
 
 ScreenHandler::ScreenHandler(uint16_t height, uint16_t width)
-    : m_WindowHeight{height}, m_WindowWidth(width)
+    : m_WindowHeight{height}, m_WindowWidth(width), m_Score {0}
 {
     m_ColorMap = new EnumColor[height * width];
     memset(m_ColorMap, 0, sizeof(EnumColor) * width * height);
@@ -33,9 +33,15 @@ ScreenHandler::ScreenHandler(uint16_t height, uint16_t width)
     init_pair(WHITE, COLOR_BLACK, COLOR_WHITE);
 
     m_GameWindow = newwin(height, width, 0, 0);
+    m_NextWindowHeight = 8;
+    m_NextWindowWidth = 8;
+    m_NextTetroWindow = newwin(m_NextWindowHeight, m_NextWindowWidth, 0, width + 5);
     refresh();
     box(m_GameWindow, 0, 0);
+    box (m_NextTetroWindow, 0, 0);
     wrefresh(m_GameWindow);
+    wrefresh(m_NextTetroWindow);
+    UpdateScore();
 }
 
 ScreenHandler::~ScreenHandler()
@@ -45,19 +51,26 @@ ScreenHandler::~ScreenHandler()
 
 void ScreenHandler::Start()
 {
+    m_NextTetrominos = m_Generator.GetTetrominos();
     m_CurrentTetrominos = m_Generator.GetTetrominos();
-    refresh();
+    while (m_CurrentTetrominos->shape == Z_SHAPE or m_CurrentTetrominos->shape == REVERSE_Z_SHAPE)
+    {
+        delete m_CurrentTetrominos;
+        m_CurrentTetrominos = m_Generator.GetTetrominos();
+    }
+    UpdateNextShapeScreen();
     UpdateVirtualScreen();
     wrefresh(m_GameWindow);
+    refresh();
 }
 
 void ScreenHandler::RunInputEvents()
 {
-    m.lock();
     keypad(m_GameWindow, true);
     while (true)
     {
         int16_t key = wgetch(m_GameWindow);
+        m.lock();
         if (key == KEY_UP)
         {
             UpKeyPressed();
@@ -75,8 +88,8 @@ void ScreenHandler::RunInputEvents()
             LeftKeyPressed();
         }
         wrefresh(m_GameWindow);
+        m.unlock();
     }
-    m.unlock();
 }
 
 void ScreenHandler::TimeTick()
@@ -92,7 +105,9 @@ void ScreenHandler::TimeTick()
     {
         ClearFullRows();
         delete m_CurrentTetrominos;
-        m_CurrentTetrominos = m_Generator.GetTetrominos();
+        m_CurrentTetrominos = m_NextTetrominos;
+        m_NextTetrominos = m_Generator.GetTetrominos();
+        UpdateNextShapeScreen();
         UpdateVirtualScreen();
     }
 }
@@ -123,18 +138,25 @@ bool ScreenHandler::CheckMask(uint8_t row, uint8_t column)
     return m_CurrentTetrominos->block[row * m_CurrentTetrominos->xSize + column];
 }
 
+bool ScreenHandler::CheckMaskForNext(uint8_t row, uint8_t column)
+{
+    return m_NextTetrominos->block[row * m_NextTetrominos->xSize + column];
+}
+
 void ScreenHandler::UpKeyPressed()
 {
     ClearShape();
     uint8_t hold = m_CurrentTetrominos->xSize;
     m_CurrentTetrominos->xSize = m_CurrentTetrominos->ySize;
     m_CurrentTetrominos->ySize = hold;
+    char *currenPositionblock = new char [m_CurrentTetrominos->size];
     char *blockCopy = new char[m_CurrentTetrominos->size];
     for (uint8_t i = 0; i < m_CurrentTetrominos->ySize; i++)
     {
         for (uint8_t j = 0; j < m_CurrentTetrominos->xSize; j++)
         {
             blockCopy[j * m_CurrentTetrominos->ySize + i] = m_CurrentTetrominos->block[i * m_CurrentTetrominos->xSize + j];
+            currenPositionblock[i * m_CurrentTetrominos->xSize + j] = m_CurrentTetrominos->block[i * m_CurrentTetrominos->xSize + j];
         }
     }
     for (uint8_t i = 0; i < m_CurrentTetrominos->ySize; i++)
@@ -145,10 +167,35 @@ void ScreenHandler::UpKeyPressed()
         }
     }
     delete[] blockCopy;
-    while (m_CurrentTetrominos->xPos < 1)
-        m_CurrentTetrominos->xPos++;
-    while (m_CurrentTetrominos->xPos + m_CurrentTetrominos->xSize > m_WindowWidth - 1)
-        m_CurrentTetrominos->xPos--;
+
+    bool bValidForRatate = true;
+    for (uint8_t i = 0; i < m_CurrentTetrominos->ySize && bValidForRatate; i++)
+    {
+        for (uint8_t j = 0; j < m_CurrentTetrominos->xSize && bValidForRatate; j++)
+        {
+            if (CheckMask(i, j))
+            {
+                wmove(m_GameWindow, m_CurrentTetrominos->yPos + i, m_CurrentTetrominos->xPos + j);
+                char charOnShape = winch(m_GameWindow);
+                if (charOnShape != ' ')
+                {
+                    bValidForRatate = false;
+                }
+            }
+        }
+    }
+    
+    if (!bValidForRatate)
+    {
+        for (uint8_t i = 0; i < m_CurrentTetrominos->ySize; i++)
+        {
+            for (uint8_t j = 0; j < m_CurrentTetrominos->xSize; j++)
+            {
+                m_CurrentTetrominos->block[i * m_CurrentTetrominos->xSize + j] = currenPositionblock[i * m_CurrentTetrominos->xSize + j];
+            }
+        }
+    }
+    delete [] currenPositionblock;
     UpdateVirtualScreen();
     wrefresh(m_GameWindow);
 }
@@ -160,22 +207,7 @@ void ScreenHandler::DownKeyPressed()
 
 void ScreenHandler::LeftKeyPressed()
 {
-    uint8_t xMinSize = 0;
-    bool bNotFound = true;
-    for (int8_t j = 0; j < m_CurrentTetrominos->xSize && bNotFound; j++)
-    {
-        for (int8_t i = 0; i < m_CurrentTetrominos->ySize && bNotFound; i++)
-        {
-            uint8_t index = i * m_CurrentTetrominos->xSize + j;
-            if (m_CurrentTetrominos->block[index] == true)
-            {
-                xMinSize = j;
-                bNotFound = false;
-            }
-        }
-    }
-
-    if (m_CurrentTetrominos->xPos + xMinSize > 1)
+    if (LeftIsEmpty())
     {
         ClearRight();
         m_CurrentTetrominos->xPos--;
@@ -275,19 +307,47 @@ bool ScreenHandler::BelowIsEmpty()
 
 bool ScreenHandler::RightIsEmpty()
 {
-    bool bNotFound = true;
-    for (int8_t j = m_CurrentTetrominos->xSize - 1; j >= 0 && bNotFound; j--)
+    bool bFoundedRows[4] = { 0 };
+    for (int8_t j = m_CurrentTetrominos->xSize - 1; j >= 0; j--)
     {
         for (int8_t i = 0; i < m_CurrentTetrominos->ySize; i++)
         {
             if (CheckMask(i, j))
             {
-                bNotFound = false;
-                wmove(m_GameWindow, m_CurrentTetrominos->yPos, m_CurrentTetrominos->xPos + j + 1);
-                uint16_t rightChar = winch(m_GameWindow);
-                if (!(rightChar == ' '))
+                if (bFoundedRows[i] != true)
                 {
-                    return false;
+                    bFoundedRows[i] = true;
+                    wmove(m_GameWindow, m_CurrentTetrominos->yPos + i, m_CurrentTetrominos->xPos + j + 1);
+                    uint16_t rightChar = winch(m_GameWindow);
+                    if (!(rightChar == ' '))
+                    {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return true;
+}
+
+bool ScreenHandler::LeftIsEmpty()
+{
+    bool bFoundedRows[4] = { 0 };
+    for (int8_t j = 0; j < m_CurrentTetrominos->xSize; j++)
+    {
+        for (int8_t i = 0; i < m_CurrentTetrominos->ySize; i++)
+        {
+            if (CheckMask(i, j))
+            {
+                if (bFoundedRows[i] != true)
+                {
+                    bFoundedRows[i] = true;
+                    wmove(m_GameWindow, m_CurrentTetrominos->yPos + i, m_CurrentTetrominos->xPos + j - 1);
+                    uint16_t rightChar = winch(m_GameWindow);
+                    if (!(rightChar == ' '))
+                    {
+                        return false;
+                    }
                 }
             }
         }
@@ -339,7 +399,8 @@ void ScreenHandler::ClearFullRows()
     }
     if (bFullRowExist)
     {
-
+        m_Score += fullRowSize;
+        UpdateScore();
         for (int16_t i = m_WindowHeight - 2; i > 0; i--)
         {
             for (int16_t j = 1; j < m_WindowWidth - 1; j++)
@@ -364,4 +425,42 @@ void ScreenHandler::ClearFullRows()
     
     }
     delete[] bFullRows;
+}
+
+void ScreenHandler::UpdateNextShapeScreen()
+{
+    for (uint8_t i = 1; i < m_NextWindowHeight - 1; i++)
+    {
+        for (uint8_t j = 1; j < m_NextWindowWidth - 1; j++)
+        {
+            wmove(m_NextTetroWindow, i, j);
+            wprintw(m_NextTetroWindow, " ");
+        }
+    }
+    for (uint8_t i = 0; i < m_NextTetrominos->ySize; i++)
+    {
+        for (uint8_t j = 0; j < m_NextTetrominos->xSize; j++)
+        {
+            if (CheckMaskForNext(i, j))
+            {
+                wmove(m_NextTetroWindow, 2 + i, 2 + j);
+                wattron(m_NextTetroWindow, COLOR_PAIR(m_NextTetrominos->color));
+                wprintw(m_NextTetroWindow, "X");
+                wattroff(m_NextTetroWindow, COLOR_PAIR(m_NextTetrominos->color));
+            }
+        }
+    }
+    wrefresh(m_NextTetroWindow);
+}
+
+void ScreenHandler::UpdateScore()
+{
+    move(m_WindowHeight - 5, m_WindowWidth + 10);
+    printw("Score: %d", m_Score);
+    refresh();
+}
+
+uint64_t ScreenHandler::GetScore()
+{
+    return m_Score;
 }

@@ -2,7 +2,7 @@
 #include "ScreenHandler/Timer.hpp"
 int main()
 {
-    ScreenHandler handler;
+    ScreenHandler handler(30, 25);
     handler.Start();
     Timer::InitiateTimer(&handler);
     handler.RunInputEvents();

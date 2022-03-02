@@ -17,8 +17,10 @@ void Timer::ListenForInputs()
 {
     while (true)
     {
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        uint64_t score = m_ScreenHandler->GetScore();
+        std::this_thread::sleep_for(std::chrono::milliseconds((300 - score * 10)));
         m.lock();
+        (200 - score *2);
         m_ScreenHandler->TimeTick();
         m.unlock();
     }

@@ -10,7 +10,7 @@ TetrominosGenerator::TetrominosGenerator()
 
 Tetrominos *TetrominosGenerator::GetTetrominos()
 {
-    EnumShape shape = static_cast<EnumShape> (rand() % 5);
+    EnumShape shape = static_cast<EnumShape> (rand() % NUMBER_OF_SHAPES);
     EnumColor color = static_cast<EnumColor> ((rand() % 7) + 1);
     EnumColor prevColor = RED;
     if (color == prevColor)
@@ -18,12 +18,14 @@ Tetrominos *TetrominosGenerator::GetTetrominos()
         color = static_cast<EnumColor>((color + 2)%7 + 1);
     }
     prevColor = color;
-    m_Tetrominouses[shape].color = color;
 
     Tetrominos *generatedTetrominos = new Tetrominos;
-    // generatedTetrominos->Copy(m_Tetrominouses[shape]);
-    generatedTetrominos->Copy(m_Tetrominouses[I_SHAPE]);
+    generatedTetrominos->Copy(m_Tetrominouses[shape]);
     generatedTetrominos->color = color;
+    generatedTetrominos->shape = shape;
+
+    // generatedTetrominos->Copy(m_Tetrominouses[I_SHAPE]);
+    // generatedTetrominos->color = color;
     return generatedTetrominos;
 }
 
@@ -55,6 +57,14 @@ void TetrominosGenerator::GenerateAllTetrominos()
          0, 1, 1};
     m_Tetrominouses[L_SHAPE].xSize = 3;
     m_Tetrominouses[L_SHAPE].ySize = 3;
+
+    m_Tetrominouses[REVERSE_L_SHAPE].size = 9;
+    m_Tetrominouses[REVERSE_L_SHAPE].block = new bool[9]
+        {0, 1, 0,
+         0, 1, 0,
+         1, 1, 0};
+    m_Tetrominouses[REVERSE_L_SHAPE].xSize = 3;
+    m_Tetrominouses[REVERSE_L_SHAPE].ySize = 3;
     
     m_Tetrominouses[Z_SHAPE].size = 9;
     m_Tetrominouses[Z_SHAPE].block = new bool[9]
@@ -63,6 +73,14 @@ void TetrominosGenerator::GenerateAllTetrominos()
          0, 1, 1};
     m_Tetrominouses[Z_SHAPE].xSize = 3;
     m_Tetrominouses[Z_SHAPE].ySize = 3;
+
+    m_Tetrominouses[REVERSE_Z_SHAPE].size = 9;
+    m_Tetrominouses[REVERSE_Z_SHAPE].block = new bool[9]
+        {0, 0, 0,
+         0, 1, 1,
+         1, 1, 0};
+    m_Tetrominouses[REVERSE_Z_SHAPE].xSize = 3;
+    m_Tetrominouses[REVERSE_Z_SHAPE].ySize = 3;
 
     m_Tetrominouses[CUBE_SHAPE].size = 4;
     m_Tetrominouses[CUBE_SHAPE].block = new bool[4]
