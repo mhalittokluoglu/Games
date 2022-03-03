@@ -5,30 +5,29 @@
 
 std::mutex m;
 
-ScreenHandler *Timer::m_ScreenHandler = nullptr;
+Game *Timer::m_Game = nullptr;
 
-void Timer::InitiateTimer(ScreenHandler *handler)
+void Timer::InitiateTimer(Game *game)
 {
-    m_ScreenHandler = handler;
+    m_Game = game;
     std::thread *keyInputThread = new std::thread(&ListenForInputs); 
 }
 
 void Timer::ListenForInputs()
 {
-    while (true)
+    m.lock();
+    bool isGameRunning = m_Game->GetIsGameRunning();
+    m.unlock();
+    while (isGameRunning)
     {
-        uint64_t score = m_ScreenHandler->GetScore();
+        uint64_t score = m_Game->GetScore();
         std::this_thread::sleep_for(std::chrono::milliseconds((300 - score * 10)));
         m.lock();
         (200 - score *2);
-        m_ScreenHandler->TimeTick();
+        m_Game->TimeTick();
+        bool isGameRunning = m_Game->GetIsGameRunning();
         m.unlock();
     }
 }
 
-void Timer::StartTimer()
-{
-
-
-}
 

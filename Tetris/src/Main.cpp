@@ -1,11 +1,9 @@
-#include "ScreenHandler/ScreenHandler.hpp"
-#include "ScreenHandler/Timer.hpp"
+#include "Game/Game.hpp"
+#include "Game/Timer.hpp"
 int main()
 {
-    ScreenHandler handler(30, 25);
-    handler.Start();
-    Timer::InitiateTimer(&handler);
-    handler.RunInputEvents();
-    getch();
-    // while(true);
+    Game game(30, 25);
+    game.Start();
+    Timer::InitiateTimer(&game);
+    game.RunInputEvents();
 }

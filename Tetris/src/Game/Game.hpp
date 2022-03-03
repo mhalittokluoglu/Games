@@ -1,13 +1,13 @@
-#ifndef _SCREENHANDLER_HPP_
-#define _SCREENHANDLER_HPP_
+#ifndef _GAME_HPP_
+#define _GAME_HPP_
 #include <ncurses.h>
 #include "../Tetrominos/TetrominosGenerator.hpp"
 class InputHandler;
-class ScreenHandler
+class Game
 {
 public:
-    ScreenHandler(uint16_t height = 30, uint16_t width = 20);
-    ~ScreenHandler();
+    Game(uint16_t height = 30, uint16_t width = 20);
+    ~Game();
     void TimeTick();
     void UpKeyPressed();
     void DownKeyPressed();
@@ -16,6 +16,7 @@ public:
     void Start();
     void RunInputEvents();
     uint64_t GetScore();
+    bool GetIsGameRunning();
 
     friend class InputHandler;
 
@@ -33,6 +34,8 @@ private:
     void ClearFullRows();
     bool CheckMaskForNext(uint8_t row, uint8_t column);
     void UpdateScore();
+    bool ThereDoesNotAnySpace();
+    void GameOver();
 
 private:
     TetrominosGenerator m_Generator;
@@ -46,5 +49,6 @@ private:
     uint8_t m_NextWindowWidth;
     EnumColor *m_ColorMap;
     uint64_t m_Score;
+    bool m_IsGameRunning;
 };
 #endif
