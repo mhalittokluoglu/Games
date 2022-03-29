@@ -40,9 +40,8 @@ void Rectangle::Draw()
 {
     m_Vao.Bind();
     m_Vbo.Bind();
-    m_Vbo.CopyData(m_Data.begin(), m_Data.size());
-    glDrawElements(GL_TRIANGLES, s_Indices.size(), GL_UNSIGNED_INT, 0);
     m_ShaderProgram->SetColor("shapeColor", Color);
+    glDrawElements(GL_TRIANGLES, s_Indices.size(), GL_UNSIGNED_INT, 0);
 }
 
 void Rectangle::UpdateData()

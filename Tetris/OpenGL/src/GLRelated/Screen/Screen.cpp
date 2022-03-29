@@ -58,8 +58,8 @@ void Screen::ProcessScreen()
     color.G = 0.6f;
     color.B = 0.4f;
     {
-        //TetrominoRenderer renderer;
-        //renderer.Initialize(m_ShaderProgram);
+        TetrominoRenderer renderer;
+        renderer.Initialize(m_ShaderProgram);
         ScreenRenderer screenRenderer;
         screenRenderer.Initialize(m_ShaderProgram);
         bool tetroMap[4][4] = {
@@ -70,7 +70,7 @@ void Screen::ProcessScreen()
             };
 
         TetrisMath::IntPosition pos;
-        //renderer.SetTetromino(tetroMap, pos, color);
+        renderer.SetTetromino(tetroMap, pos, color);
         while (!glfwWindowShouldClose(m_Window))
         {
             ProcessInput(m_Window);
@@ -80,7 +80,7 @@ void Screen::ProcessScreen()
 
             m_ShaderProgram->Use();
             screenRenderer.DrawScreen();
-            // renderer.DrawTetromino();
+            renderer.DrawTetromino();
             // vao.Bind();
             // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
