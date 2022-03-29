@@ -38,7 +38,12 @@ void ShaderProgram::Use()
 }
 
 
-void ShaderProgram::SetFloat3(const char *name, Vect3 v)
+void ShaderProgram::SetFloat3(const char *name, TetrisMath::Vec3 v)
 {
     glUniform3f(glGetUniformLocation(m_ProgramID, name), v.v1, v.v2, v.v3);
+}
+
+void ShaderProgram::SetColor(const char *name, TetrisMath::Color v)
+{
+    glUniform4f(glGetUniformLocation(m_ProgramID, name), v.R, v.G, v.B, v.A);
 }

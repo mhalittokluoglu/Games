@@ -9,7 +9,8 @@ public:
     ~ElementBuffer();
     void Bind() const;
     void Unbind() const;
-    void CopyData(uint32_t indices[], uint32_t size);
+    
+    void CopyData(uint32_t indices[], uint32_t indicesSize) const;
 
 private:
     uint32_t m_ElementId;

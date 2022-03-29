@@ -12,10 +12,10 @@ namespace ShaderSources
     const char *fragmentShaderSource = ""
         "#version 330 core\n"
         "out vec4 FragColor;\n"
-        "uniform vec3 shapeColor;\n"
+        "uniform vec4 shapeColor;\n"
         "void main()\n"
         "{\n"
-        "   FragColor = vec4(shapeColor, 1.0);\n"
+        "   FragColor = shapeColor;\n"
         "}\0";
 }
 

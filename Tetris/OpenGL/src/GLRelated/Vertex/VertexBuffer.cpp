@@ -20,9 +20,9 @@ void VertexBuffer::Unbind() const
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void VertexBuffer::CopyData(float data[], uint32_t size)
+void VertexBuffer::CopyData(float data[], uint32_t dataSize) const
 {
-    glBufferData(GL_ARRAY_BUFFER, size, data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, dataSize * sizeof(float), data, GL_DYNAMIC_DRAW);
 }
 
 void VertexBuffer::AddLayout(uint32_t layout, uint32_t vectSize,

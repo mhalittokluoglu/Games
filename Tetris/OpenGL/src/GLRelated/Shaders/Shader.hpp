@@ -2,7 +2,6 @@
 #define _SHADER_HPP_
 #include <inttypes.h>
 #include "glad/glad.h"
-#include "GLRelated/MatData.hpp"
 
 class ShaderProgram;
 class Shader
