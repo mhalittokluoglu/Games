@@ -33,8 +33,12 @@ src/TetrisEngine/MathLib/TetrisMath.hpp
 src/TetrisEngine/MathLib/TetrisMath.cpp
 )
 
-add_subdirectory(src/Logger)
 
+add_subdirectory(vendor/glfw)
+target_link_libraries(${PROJECT_NAME} glfw)
+target_include_directories(${PROJECT_NAME} PUBLIC vendor/glfw/include)
+
+add_subdirectory(src/Logger)
 target_link_libraries(${PROJECT_NAME} Logger)
 target_link_directories(${PROJECT_NAME} PUBLIC Logger)
 
@@ -43,7 +47,7 @@ target_include_directories(${PROJECT_NAME} PUBLIC src/Logger)
 
 find_package(Threads REQUIRED)
 
-target_link_libraries(${PROJECT_NAME} GL GLU X11 Xrandr dl Xi glfw Threads::Threads)
+target_link_libraries(${PROJECT_NAME} Threads::Threads)
 
 # GLAD
 target_include_directories(${PROJECT_NAME} PUBLIC vendor/glad/include)

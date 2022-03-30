@@ -1,0 +1,3 @@
+[submodule "Tetris/OpenGL/vendor/glfw"]
+	path = Tetris/OpenGL/vendor/glfw
+	url = https://github.com/glfw/glfw.git
