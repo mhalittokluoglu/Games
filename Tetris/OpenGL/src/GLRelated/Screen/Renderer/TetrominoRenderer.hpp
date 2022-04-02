@@ -3,7 +3,6 @@
 #include "Rectangle.hpp"
 #include "GLRelated/Vertex/VertexArray.hpp"
 #include "GLRelated/Vertex/ElementBuffer.hpp"
-#include <array>
 
 
 class TetrominoRenderer
@@ -16,8 +15,7 @@ public:
     void DrawTetromino();
     void DeleteTetromino();
 private:
-    static constexpr uint8_t RECTANGLESIZE = 16;
-    Rectangle m_Rectangles[RECTANGLESIZE];
+    std::array<TetrisShapes::Rectangle,16> m_Rectangles;
     uint8_t m_RectangleCount;
 
 };

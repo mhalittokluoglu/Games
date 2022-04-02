@@ -1,8 +1,8 @@
 #include "Rectangle.hpp"
 #include <cstring>
 
-
-uint32_t Rectangle::s_Indices[6] = {0,1,2,1,2,3};
+using namespace TetrisShapes;
+uint32_t TetrisShapes::Rectangle::s_Indices[6] = {0,1,2,1,2,3};
 
 Rectangle::Rectangle()
 {

@@ -1,7 +1,6 @@
 #ifndef _SCREENRENDERER_HPP_
 #define _SCREENRENDERER_HPP_
 #include "Rectangle.hpp"
-#include <array>
 class ScreenRenderer
 {
 public:
@@ -10,7 +9,6 @@ public:
     void DrawScreen();
 private:
     void SetBorders();
-    static constexpr uint8_t BORDERSIZE = 3; 
-    Rectangle m_Borders[BORDERSIZE];
+    std::array<TetrisShapes::Rectangle,3> m_Borders;
 };
 #endif
