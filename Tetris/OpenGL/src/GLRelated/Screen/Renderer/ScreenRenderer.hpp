@@ -10,6 +10,7 @@ public:
     void DrawScreen();
 private:
     void SetBorders();
-    std::array<Rectangle,3> m_Borders;
+    static constexpr uint8_t BORDERSIZE = 3; 
+    Rectangle m_Borders[BORDERSIZE];
 };
 #endif

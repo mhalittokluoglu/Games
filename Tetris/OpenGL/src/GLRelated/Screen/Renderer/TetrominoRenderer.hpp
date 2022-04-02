@@ -16,7 +16,8 @@ public:
     void DrawTetromino();
     void DeleteTetromino();
 private:
-    std::array<Rectangle,16> m_Rectangles;
+    static constexpr uint8_t RECTANGLESIZE = 16;
+    Rectangle m_Rectangles[RECTANGLESIZE];
     uint8_t m_RectangleCount;
 
 };

@@ -42,7 +42,7 @@ add_compile_definitions(LINUX_SYSTEM)
 endif()
 
 if (WINDOWS_SYSTEM)
-add_compile_definitions(WINDOWS_SYTEM)
+add_compile_definitions(WINDOWS_SYSTEM)
 endif()
 
 

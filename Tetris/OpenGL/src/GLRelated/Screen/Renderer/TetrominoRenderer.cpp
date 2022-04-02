@@ -34,7 +34,7 @@ void TetrominoRenderer::SetTetromino(bool tetroMap[][4],
 void TetrominoRenderer::Initialize(ShaderProgram *shaderProgram)
 {
     Logger::LOG_DEBUG("TetrominoRenderer::Initialized shaderProgram passed To Rectangles");
-    for(uint8_t i = 0; i < m_Rectangles.size(); i++)
+    for(uint8_t i = 0; i < RECTANGLESIZE; i++)
     {
         m_Rectangles[i].Initialize(shaderProgram);
     }
