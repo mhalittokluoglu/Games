@@ -33,6 +33,18 @@ src/TetrisEngine/MathLib/TetrisMath.hpp
 src/TetrisEngine/MathLib/TetrisMath.cpp
 )
 
+option(LOG_ENABLED "Log Enabled Option" ON)
+option(LINUX_SYSTEM "Linux System" ON)
+option(WINDOWS_SYSTEM "Windows System" OFF)
+
+if (LINUX_SYSTEM)
+add_compile_definitions(LINUX_SYSTEM)
+endif()
+
+if (WINDOWS_SYSTEM)
+add_compile_definitions(WINDOWS_SYTEM)
+endif()
+
 
 add_subdirectory(vendor/glfw)
 target_link_libraries(${PROJECT_NAME} glfw)

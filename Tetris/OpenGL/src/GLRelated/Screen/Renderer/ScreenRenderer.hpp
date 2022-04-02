@@ -1,6 +1,7 @@
 #ifndef _SCREENRENDERER_HPP_
 #define _SCREENRENDERER_HPP_
 #include "Rectangle.hpp"
+#include <array>
 class ScreenRenderer
 {
 public:

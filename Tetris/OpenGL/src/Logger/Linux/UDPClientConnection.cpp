@@ -2,7 +2,7 @@
 #include <sys/socket.h>
 #include <cstdio>
 #include <cstring>
-UDPClientConnection::UDPClientConnection(String ipAddress, uint64_t portNumber)
+UDPClientConnection::UDPClientConnection(std::string ipAddress, uint64_t portNumber)
  : m_IpAdress { ipAddress }, m_PortNumber { portNumber } 
 {
 }
@@ -19,12 +19,12 @@ void UDPClientConnection::Initialize()
 
     m_ServerAddress.sin_family = AF_INET;
     m_ServerAddress.sin_port = htons(m_PortNumber);
-    m_ServerAddress.sin_addr.s_addr = inet_addr(m_IpAdress);
+    m_ServerAddress.sin_addr.s_addr = inet_addr(m_IpAdress.c_str());
 }
 
-void UDPClientConnection::Send(const String &data)
+void UDPClientConnection::Send(const std::string &data)
 {
-    sendto(m_SocketFDescriptor, (const char *)data, data.Size(),
+    sendto(m_SocketFDescriptor, (const char *)data.c_str(), data.size(),
         MSG_CONFIRM, (const struct sockaddr *) &m_ServerAddress, 
             sizeof(m_ServerAddress));
 }

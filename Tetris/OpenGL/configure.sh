@@ -1,3 +1,3 @@
 #!/bin/bash
 
-cmake -S . -B BuildFiles/Ninja-Build/Debug -G "Ninja" -DCMAKE_BUILD_TYPE=Debug
+cmake -S . -B BuildFiles/Ninja-Build/Debug -G "Ninja" -DCMAKE_BUILD_TYPE=Debug -DLOG_ENABLED=ON -DLINUX_SYSTEM=ON

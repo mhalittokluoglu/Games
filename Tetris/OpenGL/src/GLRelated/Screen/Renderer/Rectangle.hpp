@@ -22,11 +22,12 @@ public:
     void Draw();
     void SetBorderData(float offsetX, float offsetY);
 private:
-    std::array<float, 12> m_Data;
+    void UpdateData(float X, float Y, float xoff, float yoff);
+    float m_Data[12];
     VertexBuffer m_Vbo;
     VertexArray m_Vao;
     ElementBuffer m_Ebo;
-    static std::array<uint32_t, 6> s_Indices;
+    static uint32_t s_Indices[6];
     ShaderProgram *m_ShaderProgram;
 
 };

@@ -3,6 +3,7 @@
 #include "Rectangle.hpp"
 #include "GLRelated/Vertex/VertexArray.hpp"
 #include "GLRelated/Vertex/ElementBuffer.hpp"
+#include <array>
 
 
 class TetrominoRenderer
