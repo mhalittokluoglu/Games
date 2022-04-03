@@ -6,6 +6,8 @@ using namespace TetrisMath;
 float Globals::GameWidth = 0.0f;
 float Globals::BorderSizeX = 0.0f;
 float Globals::BorderSizeY = 0.0f;
+int32_t Globals::s_RowCount = 0;
+int32_t Globals::s_ColumnCount = 0;
 
 float GLPosition::s_Height  = 0.0f;
 float GLPosition::s_Width   = 0.0f;
@@ -23,6 +25,8 @@ void TetrisMath::SetScreenValues(float xBorderSize, float yBorderSize,
     Globals::GameWidth = gameWidth;
     Globals::BorderSizeX = xBorderSize;
     Globals::BorderSizeY = yBorderSize;
+    Globals::s_RowCount = rowCount;
+    Globals::s_ColumnCount = columnCount;
     float sliceHeight   = 2.0f / rowCount;
     float sliceWidth    = gameWidth / columnCount;
 

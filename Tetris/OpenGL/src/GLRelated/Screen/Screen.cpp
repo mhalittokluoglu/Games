@@ -61,7 +61,10 @@ void Screen::ProcessScreen()
         TetrominoRenderer renderer;
         renderer.Initialize(m_ShaderProgram);
         ScreenRenderer screenRenderer;
-        screenRenderer.Initialize(m_ShaderProgram);
+        TetrisMap testMap;
+        testMap.Initialize();
+        testMap.SetMapCell(6, 7, color);
+        screenRenderer.Initialize(m_ShaderProgram, &testMap);
         bool tetroMap[4][4] = {
             1, 0, 0, 0,
             1, 1, 0, 0,
@@ -70,9 +73,14 @@ void Screen::ProcessScreen()
             };
 
         TetrisMath::IntPosition pos;
-        renderer.SetTetromino(tetroMap, pos, color);
         while (!glfwWindowShouldClose(m_Window))
         {
+            if(m_ValidForMove)
+            {
+                pos.X += m_xOffset;
+                pos.Y += m_yOffset;
+                m_ValidForMove = false;
+            }
             ProcessInput(m_Window);
             ProcessTimer();
             glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
@@ -80,6 +88,7 @@ void Screen::ProcessScreen()
 
             m_ShaderProgram->Use();
             screenRenderer.DrawScreen();
+            renderer.SetTetromino(tetroMap, pos, color);
             renderer.DrawTetromino();
             // vao.Bind();
             // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -108,7 +117,7 @@ void Screen::ProcessInput(GLFWwindow *window)
     {
         if (currentTime - m_DownTimer > 50)
         {
-            SetValidForMove(0, -1);
+            SetValidForMove(0, 1);
             m_DownTimer = currentTime;
         }
     }
@@ -139,7 +148,7 @@ void Screen::ProcessTimer()
     {
         bIsItTime = true;
         m_Timer = GetTimeInMilliSecond();
-        SetValidForMove(0, -1);
+        SetValidForMove(0, 1);
     }
 }
 
@@ -153,7 +162,7 @@ int64_t Screen::GetTimeInMilliSecond()
     return millisec_since_epoch;
 }
 
-void Screen::SetValidForMove(uint8_t xOffset, uint8_t yOffset)
+void Screen::SetValidForMove(int8_t xOffset, int8_t yOffset)
 {
     m_ValidForMove = true;
     m_xOffset = xOffset;

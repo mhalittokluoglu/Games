@@ -9,6 +9,8 @@ namespace TetrisMath
         static float GameWidth;
         static float BorderSizeX;
         static float BorderSizeY;
+        static int32_t s_RowCount;
+        static int32_t s_ColumnCount;
     };
     void SetScreenValues(float xBorderSize, float yBorderSize, 
         int32_t rowCount, int32_t columnCount, float gameWidth);

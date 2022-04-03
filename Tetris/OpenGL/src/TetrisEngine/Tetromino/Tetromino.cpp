@@ -8,7 +8,7 @@ Tetromino::Tetromino(TetrisMath::IntPosition initialPosition, TetrisMath::Color 
     memset(m_ShapeMap, 0, sizeof(m_ShapeMap));
 }
 
-void Tetromino::SetShape(EnumTetroShapes shape, bool *shapeMap[])
+void Tetromino::SetShape(EnumTetroShapes shape, bool shapeMap[4][4])
 {
     m_Shape = shape;
     memcpy(m_ShapeMap, shapeMap, sizeof(m_ShapeMap));

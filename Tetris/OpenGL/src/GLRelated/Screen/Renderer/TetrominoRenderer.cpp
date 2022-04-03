@@ -18,7 +18,7 @@ void TetrominoRenderer::SetTetromino(bool tetroMap[][4],
             {
                 TetrisMath::IntPosition rectIntPos;
                 rectIntPos.X = position.X + j;
-                rectIntPos.Y = position.X + i;
+                rectIntPos.Y = position.Y + i;
                 TetrisMath::GLPosition rectPos;
                 m_Rectangles[m_RectangleCount].Position = rectIntPos.ConvertToGLPosition();
                 m_Rectangles[m_RectangleCount].Color = color;

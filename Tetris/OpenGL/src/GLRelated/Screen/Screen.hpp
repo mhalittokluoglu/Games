@@ -17,14 +17,14 @@ private:
     static void FrameBufferSizeCallBack(GLFWwindow* window, int width, int height);
     GLFWwindow *m_Window;
     ShaderProgram *m_ShaderProgram;
-    uint8_t m_xOffset;
-    uint8_t m_yOffset;
+    int8_t m_xOffset;
+    int8_t m_yOffset;
     int64_t m_Timer;
     int64_t m_LeftTimer;
     int64_t m_RightTimer;
     int64_t m_DownTimer;
 
-    void SetValidForMove(uint8_t xOffset, uint8_t yOffset);
+    void SetValidForMove(int8_t xOffset, int8_t yOffset);
     void ResetMove();
     bool m_ValidForMove;
     bool ValidForMove();
