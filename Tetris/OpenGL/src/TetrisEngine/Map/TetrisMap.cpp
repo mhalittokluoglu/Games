@@ -39,3 +39,13 @@ void TetrisMap::ClearMapCell(int32_t row, int32_t column)
 {
     m_Map[row][column].exist = false;
 }
+
+bool TetrisMap::GetMapCell(int32_t row, int32_t column) const
+{
+    if (column < s_ColumnCount - 1&& row < s_RowCount &&
+        column >= 0 && row >= 0)
+    {
+        return !m_Map[row][column].exist;
+    }
+    return false;
+}

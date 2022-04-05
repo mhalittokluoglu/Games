@@ -26,7 +26,6 @@ src/GLRelated/Screen/Screen.hpp
 src/GLRelated/Screen/Screen.cpp
 src/TetrisEngine/Tetromino/TetrominoData.hpp
 src/TetrisEngine/Tetromino/TetrominoData.cpp
-src/TetrisEngine/Tetromino/ITetromino.hpp
 src/TetrisEngine/Tetromino/Tetromino.hpp
 src/TetrisEngine/Tetromino/Tetromino.cpp
 src/TetrisEngine/Tetromino/TetrominoGenerator.hpp
@@ -35,6 +34,8 @@ src/TetrisEngine/MathLib/TetrisMath.hpp
 src/TetrisEngine/MathLib/TetrisMath.cpp
 src/TetrisEngine/Map/TetrisMap.hpp
 src/TetrisEngine/Map/TetrisMap.cpp
+src/TetrisEngine/Engine.hpp
+src/TetrisEngine/Engine.cpp
 )
 
 option(LOG_ENABLED "Log Enabled Option" ON)

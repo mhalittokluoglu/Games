@@ -4,7 +4,7 @@ ScreenRenderer::ScreenRenderer()
 {
 }
 
-void ScreenRenderer::Initialize(ShaderProgram *shaderProgram, const TetrisMap *map)
+void ScreenRenderer::Initialize(ShaderProgram *shaderProgram, TetrisMap *map)
 {
     m_Borders[0].Initialize(shaderProgram);
     m_Borders[1].Initialize(shaderProgram);
@@ -59,9 +59,9 @@ void ScreenRenderer::DrawScreen()
     {
         for (int32_t column = 0; column < TetrisMap::s_ColumnCount; column++)
         {
-            if (m_TetrisMap->m_Map[row][column].exist)
+            if (m_TetrisMap->Map()[row][column].exist)
             {
-                m_Rectangles[row][column].Color = m_TetrisMap->m_Map[row][column].color;
+                m_Rectangles[row][column].Color = m_TetrisMap->Map()[row][column].color;
                 TetrisMath::IntPosition position;
                 position.Y = row;
                 position.X = column;

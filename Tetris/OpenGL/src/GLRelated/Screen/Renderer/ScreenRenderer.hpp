@@ -6,12 +6,12 @@ class ScreenRenderer
 {
 public:
     ScreenRenderer();
-    void Initialize(ShaderProgram *shaderProgram, const TetrisMap *map);
+    void Initialize(ShaderProgram *shaderProgram, TetrisMap *map);
     void DrawScreen();
 private:
     void SetBorders();
     std::array<TetrisShapes::Rectangle,3> m_Borders;
-    const TetrisMap *m_TetrisMap;
+    TetrisMap *m_TetrisMap;
     TetrisShapes::Rectangle **m_Rectangles;
 };
 #endif

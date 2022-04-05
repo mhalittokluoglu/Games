@@ -5,12 +5,10 @@
 #include <chrono>
 #include "GLRelated/Screen/Renderer/TetrominoRenderer.hpp"
 #include "GLRelated/Screen/Renderer/ScreenRenderer.hpp"
+#include <functional>
 
 Screen::Screen(uint32_t width, uint32_t height)
 {
-    m_xOffset = 0;
-    m_yOffset = 0;
-    m_ValidForMove = false;
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -40,55 +38,30 @@ Screen::Screen(uint32_t width, uint32_t height)
     m_ShaderProgram->AttachShader(vertexShader);
     m_ShaderProgram->AttachShader(fragmentShader);
     m_ShaderProgram->Link();
+    m_CurrentTetromino = m_Engine.GetFirstTetro();
+    std::function<void(Tetromino*)> TetroChangedCallback = std::bind(&Screen::TetrominoChanged, this, std::placeholders::_1);
+    m_Engine.SetTetroChangedCallBack(TetroChangedCallback);
 }
 
 void Screen::ProcessScreen()
 {
-    m_Timer = GetTimeInMilliSecond();
-    m_LeftTimer = GetTimeInMilliSecond();
-    m_RightTimer = GetTimeInMilliSecond();
-    m_DownTimer = GetTimeInMilliSecond();
-
-    TetrisMath::SetScreenValues(0.02f, 0.02f, 30, 20, 0.8f);
-    TetrisMath::GLPosition position;
-    position.X = 0.4f;
-    position.Y = 0.3f;
-    TetrisMath::Color color;
-    color.R = 0.4f;
-    color.G = 0.6f;
-    color.B = 0.4f;
     {
         TetrominoRenderer renderer;
         renderer.Initialize(m_ShaderProgram);
         ScreenRenderer screenRenderer;
-        TetrisMap testMap;
-        testMap.Initialize();
-        testMap.SetMapCell(6, 7, color);
-        screenRenderer.Initialize(m_ShaderProgram, &testMap);
-        bool tetroMap[4][4] = {
-            1, 0, 0, 0,
-            1, 1, 0, 0,
-            0, 1, 0, 0,
-            0, 0, 0, 0
-            };
+        screenRenderer.Initialize(m_ShaderProgram, m_Engine.GetMap());
 
         TetrisMath::IntPosition pos;
         while (!glfwWindowShouldClose(m_Window))
         {
-            if(m_ValidForMove)
-            {
-                pos.X += m_xOffset;
-                pos.Y += m_yOffset;
-                m_ValidForMove = false;
-            }
             ProcessInput(m_Window);
-            ProcessTimer();
+            m_Engine.RunApplication();
             glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             m_ShaderProgram->Use();
             screenRenderer.DrawScreen();
-            renderer.SetTetromino(tetroMap, pos, color);
+            renderer.SetTetromino(*m_CurrentTetromino);
             renderer.DrawTetromino();
             // vao.Bind();
             // glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -112,70 +85,21 @@ void Screen::ProcessInput(GLFWwindow *window)
     {
         glfwSetWindowShouldClose(window, true);
     }
-    int64_t currentTime = GetTimeInMilliSecond();
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS)
     {
-        if (currentTime - m_DownTimer > 50)
-        {
-            SetValidForMove(0, 1);
-            m_DownTimer = currentTime;
-        }
+        m_Engine.DownKeyPressed();
     }
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS)
     {
-        if (currentTime - m_RightTimer > 50)
-        {
-            SetValidForMove(1, 0);
-            m_RightTimer = currentTime;
-        }
+        m_Engine.RightKeyPressed();
     }
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS)
     {
-        if (currentTime - m_LeftTimer > 50)
-        {
-            SetValidForMove(-1, 0);
-            m_LeftTimer = currentTime;
-        }
+        m_Engine.LeftKeyPressed();
     }
 }
 
-void Screen::ProcessTimer()
+void Screen::TetrominoChanged(Tetromino *tetro)
 {
-    int64_t currentTime = GetTimeInMilliSecond();
-    int64_t offset = currentTime - m_Timer;
-    bool bIsItTime = false;
-    if (offset > 750)
-    {
-        bIsItTime = true;
-        m_Timer = GetTimeInMilliSecond();
-        SetValidForMove(0, 1);
-    }
-}
-
-int64_t Screen::GetTimeInMilliSecond()
-{
-    using std::chrono::duration_cast;
-    using std::chrono::milliseconds;
-    using std::chrono::seconds;
-    using std::chrono::system_clock;
-    auto millisec_since_epoch = duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count();
-    return millisec_since_epoch;
-}
-
-void Screen::SetValidForMove(int8_t xOffset, int8_t yOffset)
-{
-    m_ValidForMove = true;
-    m_xOffset = xOffset;
-    m_yOffset = yOffset;
-}
-void Screen::ResetMove()
-{
-    m_ValidForMove = false;
-    m_xOffset = 0;
-    m_yOffset = 0;
-}
-
-bool Screen::ValidForMove()
-{
-    return m_ValidForMove;
+    m_CurrentTetromino = tetro;
 }

@@ -1,20 +1,22 @@
 #ifndef _SHAPES_TETROMINOZ_HPP_
 #define _SHAPES_TETROMINOZ_HPP_
-#include "ITetromino.hpp"
+#include "TetrominoData.hpp"
 #include "TetrisEngine/MathLib/TetrisMath.hpp"
 
-class Tetromino : public ITetromino
+class Tetromino
 {
 public:
     Tetromino(TetrisMath::IntPosition initialPosition, TetrisMath::Color shapeColor);
     void SetShape(EnumTetroShapes shape, bool shapeMap[4][4]);
     void UpdateLocation(int8_t xOffset, int8_t yOffset);
-    NearIndices GetRightIndices() const override;
-    NearIndices GetLeftIndices() const override;
-    NearIndices GetDownIndices() const override;
-    RotationIndices GetRotatedIndices() override;
+    NearIndices GetRightIndices() const;
+    NearIndices GetLeftIndices() const;
+    NearIndices GetDownIndices() const;
+    RotationIndices GetRotatedIndices() ;
     inline EnumTetroShapes GetTetroShape() const { return m_Shape;};
-
+    void GetShapeMap(bool shapeMap[4][4]) const;
+    inline TetrisMath::IntPosition GetPosition() const { return m_Position; }
+    inline TetrisMath::Color GetColor() const { return m_Color; }
 private:
     void SetNearIndices();
     bool m_ShapeMap[4][4];

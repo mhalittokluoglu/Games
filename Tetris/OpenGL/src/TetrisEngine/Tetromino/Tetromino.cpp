@@ -35,7 +35,7 @@ void Tetromino::SetNearIndices()
                     m_LeftIndices.Y[row] = m_Position.Y + row;
                     m_LeftIndices.Available[row] = true;
                 }
-                m_DownIndices.X[column] = m_Position.Y + row + 1;
+                m_DownIndices.Y[column] = m_Position.Y + row + 1;
                 m_DownIndices.X[column] = m_Position.X + column;
                 m_DownIndices.Available[column] = true;
             }
@@ -69,4 +69,15 @@ RotationIndices Tetromino::GetRotatedIndices()
     RotationIndices result;
     // TODO: Implement Here!
     return result;
+}
+
+void Tetromino::GetShapeMap(bool shapeMap[4][4]) const
+{
+    for (uint8_t i = 0; i < 4; i++)
+    {
+        for (uint8_t j = 0; j < 4; j++)
+        {
+            shapeMap[i][j] = m_ShapeMap[i][j];
+        }
+    }
 }

@@ -3,6 +3,7 @@
 #include "Rectangle.hpp"
 #include "GLRelated/Vertex/VertexArray.hpp"
 #include "GLRelated/Vertex/ElementBuffer.hpp"
+#include "TetrisEngine/Tetromino/Tetromino.hpp"
 
 
 class TetrominoRenderer
@@ -10,6 +11,7 @@ class TetrominoRenderer
 public:
     TetrominoRenderer();
     void Initialize(ShaderProgram *shaderProgram);
+    void SetTetromino(const Tetromino &tetro);
     void SetTetromino(bool tetroMap[][4], 
     TetrisMath::IntPosition position, TetrisMath::Color color);
     void DrawTetromino();

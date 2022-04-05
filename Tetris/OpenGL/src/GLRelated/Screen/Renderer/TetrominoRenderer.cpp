@@ -6,6 +6,13 @@ TetrominoRenderer::TetrominoRenderer()
 
 }
 
+void TetrominoRenderer::SetTetromino(const Tetromino &tetro)
+{
+    bool tetroMap[4][4] = { 0 };
+    tetro.GetShapeMap(tetroMap);
+    SetTetromino(tetroMap, tetro.GetPosition(), tetro.GetColor());
+}
+
 void TetrominoRenderer::SetTetromino(bool tetroMap[][4],
     TetrisMath::IntPosition position, TetrisMath::Color color)
 {
