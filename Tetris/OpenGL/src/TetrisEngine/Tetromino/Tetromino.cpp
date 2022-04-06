@@ -43,6 +43,18 @@ void Tetromino::SetNearIndices()
     }
 }
 
+void Tetromino::RotateShape(bool rotatedShape[4][4])
+{
+    for (int8_t i = 0; i < 4; i++)
+    {
+        for (int8_t j = 0; j < 4; j++)
+        {
+            m_ShapeMap[i][j] = rotatedShape[i][j];
+        }
+    }
+    SetNearIndices();
+}
+
 NearIndices Tetromino::GetRightIndices() const
 {
     return m_RightIndices;
@@ -64,11 +76,26 @@ void Tetromino::UpdateLocation(int8_t xOffset, int8_t yOffset)
     SetNearIndices();
 }
 
-RotationIndices Tetromino::GetRotatedIndices()
+ShapeMap Tetromino::GetRotatedShapeMap()
 {
-    RotationIndices result;
-    // TODO: Implement Here!
-    return result;
+    ShapeMap rotated;
+    rotated.map[0][0] = m_ShapeMap[0][3];
+    rotated.map[0][1] = m_ShapeMap[1][3];
+    rotated.map[0][2] = m_ShapeMap[2][3];
+    rotated.map[0][3] = m_ShapeMap[3][3];
+    rotated.map[1][0] = m_ShapeMap[0][2];
+    rotated.map[1][1] = m_ShapeMap[1][2];
+    rotated.map[1][2] = m_ShapeMap[2][2];
+    rotated.map[1][3] = m_ShapeMap[3][2];
+    rotated.map[2][0] = m_ShapeMap[0][1];
+    rotated.map[2][1] = m_ShapeMap[1][1];
+    rotated.map[2][2] = m_ShapeMap[2][1];
+    rotated.map[2][3] = m_ShapeMap[3][1];
+    rotated.map[3][0] = m_ShapeMap[0][0];
+    rotated.map[3][1] = m_ShapeMap[1][0];
+    rotated.map[3][2] = m_ShapeMap[2][0];
+    rotated.map[3][3] = m_ShapeMap[3][0];
+    return rotated;
 }
 
 void Tetromino::GetShapeMap(bool shapeMap[4][4]) const

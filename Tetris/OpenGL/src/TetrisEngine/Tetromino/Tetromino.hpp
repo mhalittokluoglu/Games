@@ -3,6 +3,11 @@
 #include "TetrominoData.hpp"
 #include "TetrisEngine/MathLib/TetrisMath.hpp"
 
+struct ShapeMap
+{
+    bool map[4][4];
+};
+
 class Tetromino
 {
 public:
@@ -12,11 +17,13 @@ public:
     NearIndices GetRightIndices() const;
     NearIndices GetLeftIndices() const;
     NearIndices GetDownIndices() const;
-    RotationIndices GetRotatedIndices() ;
     inline EnumTetroShapes GetTetroShape() const { return m_Shape;};
     void GetShapeMap(bool shapeMap[4][4]) const;
     inline TetrisMath::IntPosition GetPosition() const { return m_Position; }
     inline TetrisMath::Color GetColor() const { return m_Color; }
+    ShapeMap GetRotatedShapeMap();
+    void RotateShape(bool rotatedShape[4][4]);
+
 private:
     void SetNearIndices();
     bool m_ShapeMap[4][4];

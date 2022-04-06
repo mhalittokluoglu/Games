@@ -25,8 +25,10 @@ private:
     int64_t m_LeftKeyTimer;
     int64_t m_RightKeyTimer;
     int64_t m_DownKeyTimer;
+    int64_t m_UpKeyTimer;
     int64_t m_GravityTimer;
     static constexpr int32_t KEY_TIME = 50;
+    static constexpr int32_t UP_KEY_TIME = 200;
     static constexpr int32_t TICK_TIME = 750;
     int64_t GetTimeInMilliSecond() const;
     void PassTetroToMapAndSetCurrentToNew();

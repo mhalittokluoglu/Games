@@ -22,8 +22,4 @@ struct NearIndices
     NearIndices();
 };
 
-struct RotationIndices
-{
-    NearIndices indices[3];
-};
 #endif

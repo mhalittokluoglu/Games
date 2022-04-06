@@ -8,6 +8,7 @@ Engine::Engine()
     m_LeftKeyTimer = currentTime;
     m_RightKeyTimer = currentTime;
     m_DownKeyTimer = currentTime;
+    m_UpKeyTimer = currentTime;
     m_GravityTimer = currentTime;
 }
 
@@ -29,6 +30,49 @@ Tetromino *Engine::GetFirstTetro()
 void Engine::RunApplication()
 {
     TimeTick();
+}
+
+void Engine::UpKeyPressed()
+{
+    int64_t currentTime = GetTimeInMilliSecond();
+    int64_t offset = currentTime - m_UpKeyTimer;
+    if (offset > UP_KEY_TIME)
+    {
+        ShapeMap rotated;
+        rotated = m_CurrentTetromino->GetRotatedShapeMap();
+        TetrisMath::IntPosition currentTetroPosition = m_CurrentTetromino->GetPosition();
+        bool validToRotate = true;
+        for (int8_t i = 0; i < 4; i++)
+        {
+            for (int8_t j = 0; j < 4; j++)
+            {
+                if (rotated.map[i][j])
+                {
+                    int8_t column = currentTetroPosition.X + j;
+                    int8_t row = currentTetroPosition.Y + i;
+                    if (row < TetrisMath::Globals::s_RowCount&&
+                        column < (TetrisMath::Globals::s_ColumnCount - 1) &&
+                        row > 0 &&
+                        column > -1)
+                    {
+                        if (m_Map.Map()[row][column].exist)
+                        {
+                            validToRotate = false;
+                        }
+                    }
+                    else
+                    {
+                        validToRotate = false;
+                    }
+                }
+            }
+        }
+        if (validToRotate)
+        {
+            m_CurrentTetromino->RotateShape(rotated.map);
+            m_UpKeyTimer = currentTime;
+        }
+    }
 }
 
 void Engine::RightKeyPressed()
@@ -169,9 +213,9 @@ void Engine::PassTetroToMapAndSetCurrentToNew()
 {
     TetrisMath::IntPosition position;
     position = m_CurrentTetromino->GetPosition();
-    bool shapeMap[4][4] = { 0 };
+    bool shapeMap[4][4] = {0};
     m_CurrentTetromino->GetShapeMap(shapeMap);
-    for (int8_t i = 0;  i < 4; i++)
+    for (int8_t i = 0; i < 4; i++)
     {
         for (int8_t j = 0; j < 4; j++)
         {

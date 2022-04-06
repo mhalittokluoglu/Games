@@ -97,6 +97,10 @@ void Screen::ProcessInput(GLFWwindow *window)
     {
         m_Engine.LeftKeyPressed();
     }
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS)
+    {
+        m_Engine.UpKeyPressed();
+    }
 }
 
 void Screen::TetrominoChanged(Tetromino *tetro)
