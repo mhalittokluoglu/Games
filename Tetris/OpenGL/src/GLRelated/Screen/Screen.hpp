@@ -12,7 +12,7 @@ class Screen
 public:
     Screen(uint32_t width, uint32_t height);
     void ProcessScreen();
-    void TetrominoChanged(Tetromino *tetro);
+    void TetrominoChanged(Tetromino *currentTetro, Tetromino *nextTetro);
 
 private:
     Engine m_Engine;
@@ -22,6 +22,7 @@ private:
     GLFWwindow *m_Window;
     ShaderProgram *m_ShaderProgram;
     Tetromino *m_CurrentTetromino;
+    Tetromino *m_NextTetromino;
     
 
 };

@@ -13,6 +13,7 @@ class Tetromino
 public:
     Tetromino(TetrisMath::IntPosition initialPosition, TetrisMath::Color shapeColor);
     void SetShape(EnumTetroShapes shape, bool shapeMap[4][4]);
+    void SetPosition(TetrisMath::IntPosition position);
     void UpdateLocation(int8_t xOffset, int8_t yOffset);
     NearIndices GetRightIndices() const;
     NearIndices GetLeftIndices() const;

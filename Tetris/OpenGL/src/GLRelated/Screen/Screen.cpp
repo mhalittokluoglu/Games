@@ -39,7 +39,8 @@ Screen::Screen(uint32_t width, uint32_t height)
     m_ShaderProgram->AttachShader(fragmentShader);
     m_ShaderProgram->Link();
     m_CurrentTetromino = m_Engine.GetFirstTetro();
-    std::function<void(Tetromino*)> TetroChangedCallback = std::bind(&Screen::TetrominoChanged, this, std::placeholders::_1);
+    m_NextTetromino = m_Engine.GetFirstTetro();
+    std::function<void(Tetromino*, Tetromino *)> TetroChangedCallback = std::bind(&Screen::TetrominoChanged, this, std::placeholders::_1, std::placeholders::_2);
     m_Engine.SetTetroChangedCallBack(TetroChangedCallback);
 }
 
@@ -61,6 +62,8 @@ void Screen::ProcessScreen()
 
             m_ShaderProgram->Use();
             screenRenderer.DrawScreen();
+            renderer.SetTetromino(*m_NextTetromino);
+            renderer.DrawTetromino();
             renderer.SetTetromino(*m_CurrentTetromino);
             renderer.DrawTetromino();
             // vao.Bind();
@@ -103,7 +106,8 @@ void Screen::ProcessInput(GLFWwindow *window)
     }
 }
 
-void Screen::TetrominoChanged(Tetromino *tetro)
+void Screen::TetrominoChanged(Tetromino *currentTetro, Tetromino *nextTetro)
 {
-    m_CurrentTetromino = tetro;
+    m_CurrentTetromino = currentTetro;
+    m_NextTetromino = nextTetro;
 }

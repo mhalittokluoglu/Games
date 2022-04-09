@@ -13,15 +13,17 @@ public:
     void UpKeyPressed();
     void TimeTick();
     Tetromino *GetFirstTetro();
-    void SetTetroChangedCallBack(std::function <void(Tetromino *)> callback);
+    Tetromino *GetFirstNextTetro();
+    void SetTetroChangedCallBack(std::function<void(Tetromino *, Tetromino *)> callback);
     TetrisMap *GetMap() ;
     void RunApplication();
 
 private:
-    std::function <void(Tetromino*)> TetroChangedCallback;
+    std::function <void(Tetromino*, Tetromino*)> TetroChangedCallback;
     TetrisMap m_Map;
     TetrominoGenerator m_Generator;
     Tetromino *m_CurrentTetromino;
+    Tetromino *m_NextTetromino;
     int64_t m_LeftKeyTimer;
     int64_t m_RightKeyTimer;
     int64_t m_DownKeyTimer;

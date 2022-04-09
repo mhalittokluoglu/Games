@@ -86,7 +86,7 @@ Tetromino *TetrominoGenerator::GenerateTetromino()
     color.G = static_cast<float>(static_cast<float>((rand() % 70) + 30) / 100);
     color.B = static_cast<float>(static_cast<float>((rand() % 70) + 30) / 100);
     TetrisMath::IntPosition pos;
-    pos.X = 8;
+    pos.X = TetrisMath::Globals::s_ColumnCount + 5;
     Tetromino *tetro = new Tetromino(pos, color);
     bool shapeMap[4][4] = { 0 };
 

@@ -15,6 +15,12 @@ void Tetromino::SetShape(EnumTetroShapes shape, bool shapeMap[4][4])
     SetNearIndices();
 }
 
+void Tetromino::SetPosition(TetrisMath::IntPosition position)
+{
+    m_Position = position;
+    SetNearIndices();
+}
+
 void Tetromino::SetNearIndices()
 {
     memset(m_RightIndices.Available, 0, sizeof(m_RightIndices.Available));

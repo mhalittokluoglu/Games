@@ -16,6 +16,7 @@ public:
     void SetMapCell(int32_t row, int32_t column, TetrisMath::Color color);
     bool GetMapCell(int32_t row, int32_t column) const;
     void ClearMapCell(int32_t row, int32_t column);
+    void ClearFullRows() const;
     inline TetrisMapSquare **Map() {return m_Map;}
     static int32_t s_RowCount;
     static int32_t s_ColumnCount;

@@ -4,6 +4,7 @@
 Engine::Engine()
 {
     m_CurrentTetromino = m_Generator.GenerateTetromino();
+    m_NextTetromino = m_Generator.GenerateTetromino();
     int64_t currentTime = GetTimeInMilliSecond();
     m_LeftKeyTimer = currentTime;
     m_RightKeyTimer = currentTime;
@@ -12,7 +13,7 @@ Engine::Engine()
     m_GravityTimer = currentTime;
 }
 
-void Engine::SetTetroChangedCallBack(std::function<void(Tetromino *)> callback)
+void Engine::SetTetroChangedCallBack(std::function<void(Tetromino *, Tetromino *)> callback)
 {
     TetroChangedCallback = callback;
 }
@@ -25,6 +26,11 @@ TetrisMap *Engine::GetMap()
 Tetromino *Engine::GetFirstTetro()
 {
     return m_CurrentTetromino;
+}
+
+Tetromino *Engine::GetFirstNextTetro()
+{
+    return m_NextTetromino;
 }
 
 void Engine::RunApplication()
@@ -226,6 +232,11 @@ void Engine::PassTetroToMapAndSetCurrentToNew()
         }
     }
     delete m_CurrentTetromino;
-    m_CurrentTetromino = m_Generator.GenerateTetromino();
-    TetroChangedCallback(m_CurrentTetromino);
+    m_CurrentTetromino = m_NextTetromino;
+    TetrisMath::IntPosition pos;
+    pos.X = 8;
+    m_CurrentTetromino->SetPosition(pos);
+    m_NextTetromino = m_Generator.GenerateTetromino();
+    TetroChangedCallback(m_CurrentTetromino, m_NextTetromino);
+    m_Map.ClearFullRows();
 }
